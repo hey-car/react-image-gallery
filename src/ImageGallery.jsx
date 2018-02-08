@@ -23,7 +23,8 @@ export default class ImageGallery extends React.Component {
       thumbnailsWrapperWidth: 0,
       thumbnailsWrapperHeight: 0,
       isFullscreen: false,
-      isPlaying: false
+      isPlaying: false,
+      style: []
     };
 
     if (props.lazyLoad) {
@@ -336,6 +337,7 @@ export default class ImageGallery extends React.Component {
 
   slideToIndex = (index, event) => {
     const {currentIndex, isTransitioning} = this.state;
+    const {slideDuration} = this.props; 
 
     if (!isTransitioning) {
       if (event) {
@@ -355,14 +357,28 @@ export default class ImageGallery extends React.Component {
         nextIndex = 0;
       }
 
+      const style = Array(this.props.items.length)
+        .fill()
+        .map((item, idx) => {
+          let delay = '0';
+          let zIndex = '1';
+          if (idx == currentIndex) {
+            delay = slideDuration;
+            zIndex = '0';
+          }
+          return {
+            zIndex,
+            transition: `transform ${slideDuration}ms cubic-bezier(0, 0, 0.27, 1.07) ${delay}ms`,
+          }
+        })
+
+
       this.setState({
         previousIndex: currentIndex,
         currentIndex: nextIndex,
         isTransitioning: nextIndex !== currentIndex,
         offsetPercentage: 0,
-        style: {
-          transition: `all ${this.props.slideDuration}ms ease-out`
-        }
+        style: style
       }, this._onSliding);
     }
   };
@@ -847,13 +863,27 @@ export default class ImageGallery extends React.Component {
       translate = `translate3d(${translateX}%, 0, 0)`;
     }
 
+    let zIndex = '1';
+    if (this._isOutgoingSlide(index, currentIndex)) {
+      zIndex = '0';
+    }
+
     return {
+      zIndex,
       WebkitTransform: translate,
       MozTransform: translate,
       msTransform: translate,
       OTransform: translate,
       transform: translate,
     };
+  }
+
+  _isOutgoingSlide (index, currentIndex) {
+    if (currentIndex === 0) {
+      return index === this.props.items.length - 1;
+    } else {
+      return index === currentIndex - 1;
+    }
   }
 
   _getThumbnailStyle() {
@@ -1001,7 +1031,7 @@ export default class ImageGallery extends React.Component {
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
-          style={Object.assign(slideStyle, this.state.style)}
+          style={Object.assign(slideStyle, this.state.style[index])}
           onClick={this.props.onClick}
           onTouchMove={this.props.onTouchMove}
           onTouchEnd={this.props.onTouchEnd}
