@@ -84,12 +84,10 @@ var ImageGallery = function (_React$Component) {
             }
             return {
               zIndex: zIndex,
-              border: '1px solid red',
               transition: 'transform ' + slideDuration + 'ms ' + timingFn + ' ' + delay + 'ms'
             };
           } else {
             return {
-              border: '1px solid blue',
               transition: 'transform ' + slideDuration + 'ms ' + timingFn
             };
           }
@@ -119,7 +117,7 @@ var ImageGallery = function (_React$Component) {
       /*
         handles screen change events that the browser triggers e.g. esc key
       */
-      var fullScreenElement = document.fullscreenElement || document.msFullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement1;
+      var fullScreenElement = document.fullscreenElement || document.msFullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
 
       if (_this.props.onScreenChange) {
         _this.props.onScreenChange(fullScreenElement);
@@ -348,9 +346,6 @@ var ImageGallery = function (_React$Component) {
     if (props.lazyLoad) {
       _this._lazyLoaded = [];
     }
-
-    console.log('constructor');
-    console.log(props);
     return _this;
   }
 
