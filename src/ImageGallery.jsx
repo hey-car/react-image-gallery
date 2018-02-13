@@ -56,6 +56,7 @@ export default class ImageGallery extends React.Component {
     startIndex: PropTypes.number,
     slideDuration: PropTypes.number,
     slideInterval: PropTypes.number,
+    slideOver: PropTypes.bool,
     swipeThreshold: PropTypes.number,
     swipingTransitionDuration: PropTypes.number,
     onSlide: PropTypes.func,
@@ -81,6 +82,7 @@ export default class ImageGallery extends React.Component {
     stopPropagation: PropTypes.bool,
     additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
+    timingFn: PropTypes.string
   };
 
   static defaultProps = {
@@ -110,6 +112,8 @@ export default class ImageGallery extends React.Component {
     swipingTransitionDuration: 0,
     slideInterval: 3000,
     swipeThreshold: 30,
+    slideOver: false,
+    timingFn: 'ease-out',
     renderLeftNav: (onClick, disabled) => {
       return (
         <button
@@ -336,8 +340,8 @@ export default class ImageGallery extends React.Component {
   }
 
   slideToIndex = (index, event) => {
-    const {currentIndex, isTransitioning} = this.state;
-    const {slideDuration} = this.props; 
+    const { currentIndex, isTransitioning } = this.state;
+    const { slideDuration, slideOver, timingFn } = this.props; 
 
     if (!isTransitioning) {
       if (event) {
@@ -360,18 +364,23 @@ export default class ImageGallery extends React.Component {
       const style = Array(this.props.items.length)
         .fill()
         .map((item, idx) => {
-          let delay = '0';
-          let zIndex = '1';
-          if (idx == currentIndex) {
-            delay = slideDuration;
-            zIndex = '0';
-          }
-          return {
-            zIndex,
-            transition: `transform ${slideDuration}ms cubic-bezier(0, 0, 0.27, 1.07) ${delay}ms`,
+          if (slideOver) {
+            let delay = '0';
+            let zIndex = '1';
+            if (idx == currentIndex) {
+              delay = slideDuration;
+              zIndex = '0';
+            }
+            return {
+              zIndex,
+              transition: `transform ${slideDuration}ms ${timingFn} ${delay}ms`,
+            }
+          } else {
+            return {
+              transition: `transform ${slideDuration}ms ${timingFn}`
+            }
           }
         })
-
 
       this.setState({
         previousIndex: currentIndex,
@@ -835,7 +844,7 @@ export default class ImageGallery extends React.Component {
 
   _getSlideStyle(index) {
     const { currentIndex, offsetPercentage } = this.state;
-    const { infinite, items, useTranslate3D } = this.props;
+    const { infinite, items, useTranslate3D, slideOver } = this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
 
@@ -863,19 +872,20 @@ export default class ImageGallery extends React.Component {
       translate = `translate3d(${translateX}%, 0, 0)`;
     }
 
-    let zIndex = '1';
-    if (this._isOutgoingSlide(index, currentIndex)) {
-      zIndex = '0';
-    }
-
-    return {
-      zIndex,
+    let styles = {
       WebkitTransform: translate,
       MozTransform: translate,
       msTransform: translate,
       OTransform: translate,
-      transform: translate,
-    };
+      transform: translate
+    }
+
+    if (slideOver) {
+      const zIndex = (this._isOutgoingSlide(index, currentIndex)) ? '0' : '1';
+      styles['zIndex'] = zIndex;
+    }
+
+    return styles;
   }
 
   _isOutgoingSlide (index, currentIndex) {

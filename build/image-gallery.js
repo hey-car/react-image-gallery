@@ -50,7 +50,10 @@ var ImageGallery = function (_React$Component) {
       var _this$state = _this.state,
           currentIndex = _this$state.currentIndex,
           isTransitioning = _this$state.isTransitioning;
-      var slideDuration = _this.props.slideDuration;
+      var _this$props = _this.props,
+          slideDuration = _this$props.slideDuration,
+          slideOver = _this$props.slideOver,
+          timingFn = _this$props.timingFn;
 
 
       if (!isTransitioning) {
@@ -72,16 +75,24 @@ var ImageGallery = function (_React$Component) {
         }
 
         var style = Array(_this.props.items.length).fill().map(function (item, idx) {
-          var delay = '0';
-          var zIndex = '1';
-          if (idx == currentIndex) {
-            delay = slideDuration;
-            zIndex = '0';
+          if (slideOver) {
+            var delay = '0';
+            var zIndex = '1';
+            if (idx == currentIndex) {
+              delay = slideDuration;
+              zIndex = '0';
+            }
+            return {
+              zIndex: zIndex,
+              border: '1px solid red',
+              transition: 'transform ' + slideDuration + 'ms ' + timingFn + ' ' + delay + 'ms'
+            };
+          } else {
+            return {
+              border: '1px solid blue',
+              transition: 'transform ' + slideDuration + 'ms ' + timingFn
+            };
           }
-          return {
-            zIndex: zIndex,
-            transition: 'transform ' + slideDuration + 'ms cubic-bezier(0, 0, 0.27, 1.07) ' + delay + 'ms'
-          };
         });
 
         _this.setState({
@@ -108,7 +119,7 @@ var ImageGallery = function (_React$Component) {
       /*
         handles screen change events that the browser triggers e.g. esc key
       */
-      var fullScreenElement = document.fullscreenElement || document.msFullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement;
+      var fullScreenElement = document.fullscreenElement || document.msFullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement1;
 
       if (_this.props.onScreenChange) {
         _this.props.onScreenChange(fullScreenElement);
@@ -337,6 +348,9 @@ var ImageGallery = function (_React$Component) {
     if (props.lazyLoad) {
       _this._lazyLoaded = [];
     }
+
+    console.log('constructor');
+    console.log(props);
     return _this;
   }
 
@@ -874,7 +888,8 @@ var ImageGallery = function (_React$Component) {
       var _props2 = this.props,
           infinite = _props2.infinite,
           items = _props2.items,
-          useTranslate3D = _props2.useTranslate3D;
+          useTranslate3D = _props2.useTranslate3D,
+          slideOver = _props2.slideOver;
 
       var baseTranslateX = -100 * currentIndex;
       var totalSlides = items.length - 1;
@@ -903,19 +918,20 @@ var ImageGallery = function (_React$Component) {
         translate = 'translate3d(' + translateX + '%, 0, 0)';
       }
 
-      var zIndex = '1';
-      if (this._isOutgoingSlide(index, currentIndex)) {
-        zIndex = '0';
-      }
-
-      return {
-        zIndex: zIndex,
+      var styles = {
         WebkitTransform: translate,
         MozTransform: translate,
         msTransform: translate,
         OTransform: translate,
         transform: translate
       };
+
+      if (slideOver) {
+        var zIndex = this._isOutgoingSlide(index, currentIndex) ? '0' : '1';
+        styles['zIndex'] = zIndex;
+      }
+
+      return styles;
     }
   }, {
     key: '_isOutgoingSlide',
@@ -1220,6 +1236,7 @@ ImageGallery.propTypes = {
   startIndex: _propTypes2.default.number,
   slideDuration: _propTypes2.default.number,
   slideInterval: _propTypes2.default.number,
+  slideOver: _propTypes2.default.bool,
   swipeThreshold: _propTypes2.default.number,
   swipingTransitionDuration: _propTypes2.default.number,
   onSlide: _propTypes2.default.func,
@@ -1244,7 +1261,8 @@ ImageGallery.propTypes = {
   renderItem: _propTypes2.default.func,
   stopPropagation: _propTypes2.default.bool,
   additionalClass: _propTypes2.default.string,
-  useTranslate3D: _propTypes2.default.bool
+  useTranslate3D: _propTypes2.default.bool,
+  timingFn: _propTypes2.default.string
 };
 ImageGallery.defaultProps = {
   items: [],
@@ -1273,6 +1291,8 @@ ImageGallery.defaultProps = {
   swipingTransitionDuration: 0,
   slideInterval: 3000,
   swipeThreshold: 30,
+  slideOver: false,
+  timingFn: 'ease-out',
   renderLeftNav: function renderLeftNav(onClick, disabled) {
     return _react2.default.createElement('button', {
       type: 'button',
