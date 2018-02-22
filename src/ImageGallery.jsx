@@ -866,10 +866,12 @@ export default class ImageGallery extends React.Component {
       translateX = this._getTranslateXForTwoSlide(index);
     }
 
-    let translate = `translate(${translateX}%, 0)`;
+    // hacky fix for jumping transitions in firefox
+    // https://stackoverflow.com/a/24855601/9037749
+    let translate = `translate(${translateX}%, 0) rotate(0.0001deg)`;
 
     if (useTranslate3D) {
-      translate = `translate3d(${translateX}%, 0, 0)`;
+      translate = `translate3d(${translateX}%, 0, 0) rotate(0.0001deg)`;
     }
 
     let styles = {
