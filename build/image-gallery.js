@@ -84,7 +84,7 @@ var ImageGallery = function (_React$Component) {
             }
             return {
               zIndex: zIndex,
-              transition: 'transform ' + slideDuration + 'ms ' + timingFn + ' ' + delay + 'ms'
+              transition: 'transform ' + slideDuration + 'ms ' + timingFn + ' ' + delay + 'ms '
             };
           } else {
             return {
@@ -907,10 +907,10 @@ var ImageGallery = function (_React$Component) {
         translateX = this._getTranslateXForTwoSlide(index);
       }
 
-      var translate = 'translate(' + translateX + '%, 0)';
+      var translate = 'translate(' + translateX + '%, 0) rotate(0.0001deg)';
 
       if (useTranslate3D) {
-        translate = 'translate3d(' + translateX + '%, 0, 0)';
+        translate = 'translate3d(' + translateX + '%, 0, 0) rotate(0.0001deg)';
       }
 
       var styles = {
