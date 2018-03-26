@@ -84,7 +84,7 @@ var ImageGallery = function (_React$Component) {
             }
             return {
               zIndex: zIndex,
-              transition: 'transform ' + slideDuration + 'ms ' + timingFn + ' ' + delay + 'ms '
+              transition: 'transform ' + slideDuration + 'ms ' + timingFn + ' ' + delay + 'ms'
             };
           } else {
             return {
@@ -907,6 +907,8 @@ var ImageGallery = function (_React$Component) {
         translateX = this._getTranslateXForTwoSlide(index);
       }
 
+      // hacky fix for jumping transitions in firefox
+      // https://stackoverflow.com/a/24855601/9037749
       var translate = 'translate(' + translateX + '%, 0) rotate(0.0001deg)';
 
       if (useTranslate3D) {
@@ -1151,7 +1153,7 @@ var ImageGallery = function (_React$Component) {
         )
       );
 
-      var classNames = ['image-gallery', this.props.additionalClass, modalFullscreen ? 'fullscreen-modal' : ''].filter(function (name) {
+      var classNames = ['image-gallery', this.props.className, modalFullscreen ? 'fullscreen-modal' : ''].filter(function (name) {
         return typeof name === 'string';
       }).join(' ');
 
@@ -1255,7 +1257,6 @@ ImageGallery.propTypes = {
   renderFullscreenButton: _propTypes2.default.func,
   renderItem: _propTypes2.default.func,
   stopPropagation: _propTypes2.default.bool,
-  additionalClass: _propTypes2.default.string,
   useTranslate3D: _propTypes2.default.bool,
   timingFn: _propTypes2.default.string
 };
