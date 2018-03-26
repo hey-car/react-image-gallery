@@ -80,7 +80,6 @@ export default class ImageGallery extends React.Component {
     renderFullscreenButton: PropTypes.func,
     renderItem: PropTypes.func,
     stopPropagation: PropTypes.bool,
-    additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
     timingFn: PropTypes.string
   };
@@ -1203,7 +1202,7 @@ export default class ImageGallery extends React.Component {
 
     const classNames = [
       'image-gallery',
-      this.props.additionalClass,
+      this.props.className,
       modalFullscreen ? 'fullscreen-modal' : '',
     ].filter(name => typeof name === 'string').join(' ');
 
