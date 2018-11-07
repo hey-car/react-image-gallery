@@ -1040,7 +1040,7 @@ export default class ImageGallery extends React.Component {
 
       const slide = (
         <div
-          key={index}
+          key={item.original + index}
           className={'image-gallery-slide' + alignment + originalClass}
           style={Object.assign(slideStyle, this.state.style[index])}
           onClick={this.props.onClick}
