@@ -1010,7 +1010,7 @@ var ImageGallery = function (_React$Component) {
         var slide = _react2.default.createElement(
           'div',
           {
-            key: index,
+            key: item.original + index,
             className: 'image-gallery-slide' + alignment + originalClass,
             style: _extends(slideStyle, _this6.state.style[index]),
             onClick: _this6.props.onClick,
