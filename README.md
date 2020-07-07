@@ -3,6 +3,7 @@ React Carousel Image Gallery
 
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
 [![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](http://www.npmjs.com/package/react-image-gallery)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhey-car%2Freact-image-gallery.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhey-car%2Freact-image-gallery?ref=badge_shield)
 
 ## Live Demo (try it on mobile for swipe support)
 Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
@@ -262,3 +263,6 @@ Then open [`localhost:8001`](http://localhost:8001) in a browser.
 # License
 
 MIT
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhey-car%2Freact-image-gallery.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhey-car%2Freact-image-gallery?ref=badge_large)
